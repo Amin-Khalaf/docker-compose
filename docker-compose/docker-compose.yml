@@ -1,0 +1,36 @@
+version: "3"
+services: 
+  app: 
+    image: khalaf912/dolibarr:lastest
+    container_name: dolibarr-app
+    ports:
+      - 80:80
+    volumes:
+      - dolibarr_conf:/var/www/html/dolibarr/htdocs/conf
+      - dolibarr_docs:/var/www/html/dolibarr/htdocs/documents
+    environment: {}
+
+  db:
+    image: mariadb:10.3
+    container_name: dolibarr-db
+    networks:
+      - dolibarrNetwork
+    #restart: always
+    command: --character_set_client=utf8 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --character-set-client-handshake=FALSE
+    ports:
+      - 3306:3306
+    volumes:
+      - dolibarr_db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlrootpassword
+      - MYSQL_DATABASE=dolibarr
+      - MYSQL_USER=dolibarr
+      - MYSQL_PASSWORD=dolibarrdbpass
+
+networks:
+  dolibarrNetwork: {}
+ 
+volumes:
+  dolibarr_conf: {}
+  dolibarr_docs: {}
+  dolibarr_db: {}
